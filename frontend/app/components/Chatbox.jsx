@@ -53,9 +53,13 @@ export default function Chatbox() {
       fetch(`http://127.0.0.1:8000/api/v1/threads?user_id=${selectedUser.id}`)
         .then((res) => (res.ok ? res.json() : []))
         .then((data) => {
-          const threadIds = Array.isArray(data) ? data.map((thread) => thread.id) : [];
+          const threadIds = Array.isArray(data)
+            ? data.map((thread) => thread.id)
+            : [];
           setChats(threadIds.reverse());
-          setChatNames(Object.fromEntries(threadIds.map((id) => [id, `Chat ${id}`])));
+          setChatNames(
+            Object.fromEntries(threadIds.map((id) => [id, `Chat ${id}`]))
+          );
         })
         .catch(() => setChats([]));
     }
@@ -65,7 +69,9 @@ export default function Chatbox() {
     if (!chatId) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/v1/messages?thread_id=${chatId}`);
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/v1/messages?thread_id=${chatId}`
+      );
       if (!res.ok) throw new Error("Failed to fetch messages");
 
       const data = await res.json();
@@ -114,7 +120,10 @@ export default function Chatbox() {
         [threadId]: [
           ...(prev[threadId] || []),
           { text: input, sender: "User" },
-          { text: data.content, sender: data.sender_type === "System" ? "System" : "User" },
+          {
+            text: data.content,
+            sender: data.sender_type === "System" ? "System" : "User",
+          },
         ],
       }));
 
@@ -139,14 +148,18 @@ export default function Chatbox() {
         >
           + Add User
         </button>
-  
+
         {/* User Selector Dropdown */}
         <div className="flex items-center">
           <div className="flex-1">
-            <UserSelector users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+            <UserSelector
+              users={users}
+              selectedUser={selectedUser}
+              setSelectedUser={setSelectedUser}
+            />
           </div>
         </div>
-  
+
         {/* New Chat Button */}
         <button
           className="text-sm bg-green-500 px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 w-full"
@@ -154,7 +167,7 @@ export default function Chatbox() {
         >
           + New Chat
         </button>
-  
+
         {/* Chat List */}
         <ChatList
           ref={chatListRef}
@@ -166,28 +179,40 @@ export default function Chatbox() {
           messages={messages}
         />
       </div>
-  
+
       <div className="w-3/4 flex flex-col p-4 h-screen ml-5">
         {/* Message List */}
         <MessageList messages={messages} currentChat={currentChat} />
-  
+
         {/* Input and Send Button */}
         <div className="flex mt-4 p-3 border bg-white rounded-lg shadow-md">
           <input
             className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
             placeholder="Type a message..."
           />
           <button
             className="ml-3 p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
             onClick={sendMessage}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
+            tabIndex={0}
           >
             Send
           </button>
         </div>
       </div>
-  
+
       {/* User Name Modal */}
       {showUserNameModal && (
         <UserNamePrompt

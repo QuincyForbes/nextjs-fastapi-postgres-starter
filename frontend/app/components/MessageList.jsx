@@ -21,14 +21,16 @@ export default function MessageList({ messages, currentChat }) {
 
             return (
               <div
-                key={index}
-                className={`p-2 my-1 rounded-lg max-w-[75%] ${
-                  isUser ? "bg-blue-200 text-right ml-auto" : "bg-gray-200 text-left"
-                }`}
-              >
-                <p className="text-xs text-gray-500">{isUser ? "You" : sender}</p>
-                <p className="text-black">{msg.text || msg.content || "No message content"}</p>
-              </div>
+              key={index}
+              className={`p-2 my-1 rounded-lg max-w-[75%] ${
+                isUser ? "bg-blue-200 text-left ml-auto" : "bg-gray-200 text-left mr-auto"
+              }`}
+              style={{ wordWrap: "break-word", whiteSpace: "normal" }}
+            >
+              <p className="text-xs text-gray-500">{isUser ? "You" : sender}</p>
+              <p className="text-black">{msg.text || msg.content || "No message content"}</p>
+            </div>
+            
             );
           })
         ) : (
