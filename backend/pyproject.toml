@@ -1,5 +1,7 @@
 [tool.poetry]
 name = "backend"
+package-mode = false
+
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
@@ -13,6 +15,8 @@ asyncpg = "*"
 greenlet = "*"
 psycopg2 = "*"
 uvicorn = "*"
+alembic = "*"
+ruff = "*"
 
 
 [build-system]

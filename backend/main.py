@@ -1,29 +1,20 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from sqlalchemy import select
-from seed import seed_user_if_needed
-from sqlalchemy.ext.asyncio import AsyncSession
-from db_engine import engine
-from models import User
+from fastapi import FastAPI
+from api.v1.views import messages, threads, users
+from fastapi.middleware.cors import CORSMiddleware
 
-seed_user_if_needed()
 
 app = FastAPI()
 
+app.include_router(messages.router, prefix="/api/v1")
 
-class UserRead(BaseModel):
-    id: int
-    name: str
+app.include_router(users.router, prefix="/api/v1")
 
+app.include_router(threads.router, prefix="/api/v1")
 
-@app.get("/users/me")
-async def get_my_user():
-    async with AsyncSession(engine) as session:
-        async with session.begin():
-            # Sample logic to simplify getting the current user. There's only one user.
-            result = await session.execute(select(User))
-            user = result.scalars().first()
-
-            if user is None:
-                raise HTTPException(status_code=404, detail="User not found")
-            return UserRead(id=user.id, name=user.name)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
