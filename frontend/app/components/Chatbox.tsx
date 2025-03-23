@@ -25,7 +25,7 @@ export default function Chatbox() {
   const handleNewChat = () => {
     if (!selectedUser) return;
 
-    const tempChatId = "temp";
+    const tempChatId = "";
     setCurrentChat(tempChatId);
     setMessages((prev) => ({ ...prev, [tempChatId]: [] }));
   };
