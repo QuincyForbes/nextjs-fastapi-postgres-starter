@@ -1,11 +1,21 @@
-from datetime import datetime
-from sqlalchemy import String, DateTime, Boolean
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
 from models.base import Base
 
 
 class User(Base):
+    """
+    Represents a user of the system.
+
+    Attributes:
+        id (int): The unique identifier for the user. Automatically incremented.
+        name (str): The username. Must be unique and no longer than 30 characters.
+
+    Methods:
+        __repr__(): Returns a string representation of the User instance.
+    """
+
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

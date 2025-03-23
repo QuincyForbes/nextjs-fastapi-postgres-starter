@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+
 from models.base import Base
 
 
 class Thread(Base):
     """
-    Represents a thread in a messaging system, linking messages to a specific user.
+    Represents a thread(conversation) linking messages to a specific user.
 
     Attributes:
         id (int): The primary key of the thread.

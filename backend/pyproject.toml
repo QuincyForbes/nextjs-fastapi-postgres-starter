@@ -4,7 +4,7 @@ package-mode = false
 
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Quincy Forbes <quincyforbes@pm.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -22,3 +22,7 @@ ruff = "*"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 88  
+extend-select = ["I"]  
