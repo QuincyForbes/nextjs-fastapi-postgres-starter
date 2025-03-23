@@ -1,8 +1,13 @@
-import { useState } from "react";
-import {BASE_URL}  from '../api/config';
+import { useState, KeyboardEvent } from "react";
+import { BASE_URL } from "../api/config";
+import { UserNamePromptProps } from "../types/UserNamePromptProps";
+import { User } from "../types/User";
 
-export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }) {
-  const [userName, setUserName] = useState("");
+export default function UserNamePrompt({
+  setSelectedUser,
+  setShowUserNameModal,
+}: UserNamePromptProps) {
+  const [userName, setUserName] = useState<string>("");
 
   const handleSubmit = async () => {
     if (userName.trim()) {
@@ -14,11 +19,11 @@ export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }
           },
           body: JSON.stringify({ name: userName }),
         });
-  
+
         if (response.ok) {
-          const data = await response.json();
+          const data: User = await response.json();
           setSelectedUser(data);
-          localStorage.setItem("selectedUser", JSON.stringify(data)); 
+          localStorage.setItem("selectedUser", JSON.stringify(data));
           setShowUserNameModal(false);
         }
       } catch (error) {
@@ -27,9 +32,9 @@ export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }
     }
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      handleSubmit(); 
+      handleSubmit();
     }
   };
 
@@ -42,7 +47,7 @@ export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }
           className="w-full p-3 border rounded-lg"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          onKeyDown={handleKeyDown} // Add keydown event listener
+          onKeyDown={handleKeyDown}
           placeholder="Enter name"
         />
         <div className="mt-4 flex justify-between">

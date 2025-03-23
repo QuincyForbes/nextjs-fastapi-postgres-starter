@@ -1,7 +1,13 @@
 "use client";
 
-export default function UserSelector({ users, selectedUser, setSelectedUser }) {
-  // Check if users is an array and has items
+import React from "react";
+import { UserSelectorProps } from "../types/UserSelectorProps";
+
+export default function UserSelector({
+  users,
+  selectedUser,
+  setSelectedUser,
+}: UserSelectorProps) {
   const hasUsers = Array.isArray(users) && users.length > 0;
 
   return (
@@ -11,7 +17,9 @@ export default function UserSelector({ users, selectedUser, setSelectedUser }) {
         value={selectedUser ? selectedUser.id : ""}
         onChange={(e) => {
           const userId = parseInt(e.target.value, 10);
-          const newUser = hasUsers ? users.find((user) => user.id === userId) : null;
+          const newUser = hasUsers
+            ? users.find((user) => user.id === userId) || null
+            : null;
           setSelectedUser(newUser);
           localStorage.setItem("selectedUser", JSON.stringify(newUser));
         }}
