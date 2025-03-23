@@ -5,6 +5,8 @@ import UserSelector from "./UserSelector";
 import ChatList from "./ChatList";
 import MessageList from "./MessageList";
 import UserNamePrompt from "./UserNameModal";
+import {BASE_URL}  from '../api/config';
+
 
 export default function Chatbox() {
   const [users, setUsers] = useState(null);
@@ -26,7 +28,9 @@ export default function Chatbox() {
   const chatListRef = useRef(null);
 
   const fetchUsers = () => {
-    fetch("http://127.0.0.1:8000/api/v1/users")
+
+
+    fetch(`${BASE_URL}/users`)
       .then((res) => res.json())
       .then((data) => {
         if (data && data.length === 0) {
@@ -50,7 +54,7 @@ export default function Chatbox() {
       setCurrentChat(null);
       setMessages({});
 
-      fetch(`http://127.0.0.1:8000/api/v1/threads?user_id=${selectedUser.id}`)
+      fetch(`${BASE_URL}/threads?user_id=${selectedUser.id}`)
         .then((res) => (res.ok ? res.json() : []))
         .then((data) => {
           const threadIds = Array.isArray(data)
@@ -70,7 +74,7 @@ export default function Chatbox() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/v1/messages?thread_id=${chatId}`
+        `${BASE_URL}/messages?thread_id=${chatId}`
       );
       if (!res.ok) throw new Error("Failed to fetch messages");
 
@@ -99,7 +103,7 @@ export default function Chatbox() {
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/v1/messages", {
+      const res = await fetch(`${BASE_URL}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(messagePayload),

@@ -12,4 +12,4 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, email={self.email!r})"
+        return f"User(id={self.id!r}, name={self.name!r})"

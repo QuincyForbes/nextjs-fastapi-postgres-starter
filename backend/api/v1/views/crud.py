@@ -20,7 +20,7 @@ async def get_or_add_user(db: AsyncSession, name: str) -> User | None:
         User | None: The existing or newly created user object if successful, otherwise None.
 
     Raises:
-        IntegrityError: If there is a database constraint violation.
+        IntegrityError: If there is a database constraint violation, attempts to return the User if it exist.
     """
     try:
         # First try to find an existing user with this name
@@ -41,7 +41,9 @@ async def get_or_add_user(db: AsyncSession, name: str) -> User | None:
 
     except IntegrityError:
         await db.rollback()
-        return None
+        stmt = select(User).where(User.name == name)
+        result = await db.execute(stmt)
+        return result.scalar_one_or_none()
 
 
 async def add_thread(db: AsyncSession, user_id: int) -> Thread | None:
@@ -68,27 +70,6 @@ async def add_thread(db: AsyncSession, user_id: int) -> Thread | None:
         await db.rollback()
         return None
 
-
-async def add_thread(db: AsyncSession, user_id: int) -> int:
-    """
-    Creates a new thread and returns its ID.
-
-    Args:
-        db (AsyncSession): The asynchronous database session.
-        user_id (int): The ID of the user for whom the thread is created.
-
-    Returns:
-        int: The ID of the newly created thread.
-    """
-    try:
-        new_thread = Thread(user_id=user_id)
-        db.add(new_thread)
-        await db.commit()
-        await db.refresh(new_thread)
-        return new_thread.id
-    except IntegrityError:
-        await db.rollback()
-        return None
 
 
 async def add_message(

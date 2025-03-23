@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {BASE_URL}  from '../api/config';
 
 export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }) {
   const [userName, setUserName] = useState("");
@@ -6,7 +7,7 @@ export default function UserNamePrompt({ setSelectedUser, setShowUserNameModal }
   const handleSubmit = async () => {
     if (userName.trim()) {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/v1/users", {
+        const response = await fetch(`${BASE_URL}/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
