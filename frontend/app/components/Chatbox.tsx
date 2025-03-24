@@ -16,19 +16,21 @@ export default function Chatbox() {
   const { selectedUser, setSelectedUser, loading } = useSelectedUser();
   const { chats, chatNames, setChats, setChatNames } = useChatThreads(selectedUser);
   const { messages, setMessages, fetchChatMessages } = useChatMessages();
-  const [currentChat, setCurrentChat] = useState<string | null>(null);
+  const [currentChat, setCurrentChat] = useState<number | null>(null);
   const [input, setInput] = useState<string>("");
   const [showUserNameModal, setShowUserNameModal] = useState<boolean>(false);
   const chatListRef = useRef<HTMLUListElement | null>(null);
 
 
   const handleNewChat = () => {
-    if (!selectedUser) return;
-
-    const tempChatId = "";
+    const tempChatId = null;
     setCurrentChat(tempChatId);
-    setMessages((prev) => ({ ...prev, [tempChatId]: [] }));
+    setMessages((prev) => ({
+      ...prev,
+      [Number(tempChatId)]: null, 
+    }));
   };
+  
 
   const sendMessage = useCallback(async () => {
     if (!input.trim() || !selectedUser) return;
@@ -36,8 +38,9 @@ export default function Chatbox() {
     const messagePayload = {
       user_id: selectedUser.id,
       message: input,
-      thread_id: currentChat,
+      thread_id: currentChat || null, 
     };
+    
   
     try {
       const res = await fetch(`${BASE_URL}/messages`, {
@@ -49,7 +52,7 @@ export default function Chatbox() {
       if (!res.ok) throw new Error("Failed to send message");
   
       const data = await res.json();
-      const threadId: string = data.thread_id;
+      const threadId: number = data.thread_id;
   
       if (!chats.includes(threadId)) {
         setChats((prevChats) => [threadId, ...prevChats]);

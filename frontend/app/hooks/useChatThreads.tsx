@@ -3,7 +3,7 @@ import { BASE_URL } from "../api/config";
 import { User } from "../types/User";
 
 export function useChatThreads(selectedUser: User | null) {
-  const [chats, setChats] = useState<string[]>([]);
+  const [chats, setChats] = useState<number[]>([]);
   const [chatNames, setChatNames] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function useChatThreads(selectedUser: User | null) {
 
     fetch(`${BASE_URL}/threads?user_id=${selectedUser.id}`)
       .then((res) => (res.ok ? res.json() : []))
-      .then((data: { id: string }[]) => {
+      .then((data: { id: number}[]) => {
         const threadIds = Array.isArray(data)
           ? data.map((thread) => thread.id)
           : [];

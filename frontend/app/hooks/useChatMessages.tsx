@@ -7,7 +7,7 @@ type ChatMessages = Record<string, Message[]>;
 export function useChatMessages() {
   const [messages, setMessages] = useState<ChatMessages>({});
 
-  const fetchChatMessages = async (chatId: string | null) => {
+  const fetchChatMessages = async (chatId: number| null) => {
     if (!chatId) return;
 
     try {

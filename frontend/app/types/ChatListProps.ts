@@ -1,8 +1,8 @@
 export interface ChatListProps {
-  chats: string[];
+  chats: number[];
   chatNames: Record<string, string>;
-  currentChat: string | null;
-  setCurrentChat: (chat: string) => void;
-  fetchChatMessages: (chat: string) => void;
+  currentChat: number | null;
+  setCurrentChat: (chat: number) => void;
+  fetchChatMessages: (chat: number) => void;
   messages: Record<string, any>;
 }
